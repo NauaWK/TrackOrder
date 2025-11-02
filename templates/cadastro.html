@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <style>
+        body {
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        div {
+            width: 50%;
+            height: 70%;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 5%;
+            border-radius: 20px;
+            background-color: hsl(60, 31%, 94%);
+        }
+        div form {
+            font-size: 1.1em;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        div form label {
+            margin-top: 10%;
+        }
+        div form input, div form select {
+            border: none;
+            font-size: 1em;
+            padding: 7%;
+            margin-top: 2%;
+        }
+        div form button {
+            margin-top: 10%;
+            color: #ffffff;
+            background-color: hsla(240, 100%, 50%, 0.7);
+            font-size: 1em;
+            padding: 7% 12%;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        div form button:hover {
+            background-color: hsla(240, 100%, 50%, 0.5);
+        }
+        div form button:active {
+            background-color: hsla(240, 100%, 50%, 0.3);
+        }
+        div a {
+            text-decoration: none;
+            color: #000000;
+            margin-top: 5%;
+        }
+        div a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Cadastrar-se</h1>
+        <form action="../server/cadastro.php" method="post">
+            <label for="Nome">Nome:</label>
+            <input type="text" name="nome" placeholder="Nome" required>
+
+            <label for="Senha">Senha:</label>
+            <input type="password" name="senha" placeholder="Senha" required>
+
+            <label for="Cargo">Cargo:</label>
+            <select name="cargo" required>
+                <option value="" disabled selected>Selecione seu cargo</option>
+                <option value="funcionario">Funcionário</option>
+                <option value="gerente">Gerente</option>
+            </select>
+
+            <button type="submit">Enviar</button>
+        </form>
+        <a href="index.html">Voltar para página de login</a>
+    </div>
+</body>
+</html>

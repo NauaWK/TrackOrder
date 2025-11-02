@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #leftDiv{
+            background-color: hsl(60, 31%, 94%);
+            border-right: 2px solid #e0dbc7;
+        }
+        .halfDiv{
+            height: 100vh;
+            width: 50vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        h1{
+            font-family: Verdana, 
+            Geneva, Tahoma, sans-serif;
+            font-size: 2em;
+        }
+        #trackText{
+            color: hsla(0, 100%, 50%, 0.7);
+        }
+        #orderText{
+            color: hsla(240, 100%, 50%, 0.7);
+        }
+        .spanTextTitle{
+            font-size: 2.5em;
+        }
+        #formCard{
+            background-color: hsl(60, 30%, 96%);
+            width: 50%;
+            padding: 3%;
+            border-radius: 20px;
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1em;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        form label{
+            margin-top: 5%;
+        }
+        form input{
+            font-size: 1em;
+            margin-top: 1%;
+            padding: 4%;
+            border: none;
+        }
+        form button{
+            margin-top: 10%;
+            color: #ffffff;
+            font-size: 1em;
+            padding: 5% 12%;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #submitBtn{
+            background-color: hsla(240, 100%, 50%, 0.7);
+        }
+        #submitBtn:hover{
+            background-color: hsla(240, 100%, 50%, 0.5);
+        }
+        #submitBtn:active{
+            background-color: hsla(240, 100%, 50%, 0.3);
+        }
+        #signUpBtn{
+            border: none;
+            display: block;
+            margin: 0 auto;
+            margin-top: 10%;
+            padding: 5%;
+            cursor: pointer;
+            font-size: 1em;
+            transition: 0.3s ease;
+            background-color: hsl(60, 30%, 96%);
+        }
+        #signUpBtn a{
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            text-decoration: none;
+            color: #000000;
+        }
+        #signUpBtn:hover{
+            border-radius: 10px;
+            background-color: #000000;
+            a{color: #ffffff;}
+        }
+        #signUpBtn:active{
+            background-color: hsla(0, 0%, 0%, 0.8);
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div id="leftDiv" class="halfDiv">
+        <h1>Seja bem-vindo(a) ao <br>
+            <span id="trackText" class="spanTextTitle">Track</span><span id="orderText" class="spanTextTitle">Order</span>
+        </h1>
+    </div>
+    <div id="rightDiv" class="halfDiv">
+        <div id="formCard">
+            <form action="../server/login.php" method="post">
+                <label for="nome">Nome:</label>
+                <input type="text" name="nome" placeholder="Nome" required>
+                <label for="senha">Senha:</label>
+                <input type="password" name="senha" placeholder="Senha" required>
+                <button type="submit" id="submitBtn">Entrar</button>
+            </form>
+            <button id="signUpBtn">
+                <a href="cadastro.html" target="_blank">Cadastrar-se</a>
+            </button>
+        </div>
+    </div>
+</body>
+</html>
