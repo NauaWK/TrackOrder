@@ -3,7 +3,7 @@
 //arquivo de conexão com o banco que será incluído nos outros arquivos .php
 $host = 'localhost:3307';
 $user = 'root';
-$pass = 'naua123';
+$pass = '';
 $dbname = 'trackorder';
 
 $conn = new mysqli($host, $user, $pass, $dbname);
