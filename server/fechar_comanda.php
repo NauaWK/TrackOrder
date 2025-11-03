@@ -1,24 +1,27 @@
 <?php
-include 'db.php';
 session_start();
 
+include('db/conexao.php');
+
+// Verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
-  http_response_code(403);
-  echo json_encode(["erro" => "Não autorizado"]);
-  exit();
+  echo "<script>alert('Você precisa estar logado.'); window.location.href='../templates/index.html';</script>";
+  exit;
 }
 
-$input = json_decode(file_get_contents("php://input"), true);
-$comanda_id = $input['comanda_id'];
+// Verifica se foi passado o ID da comanda
+if (!isset($_GET['comanda_id'])) {
+  echo "<script>alert('Comanda não especificada.'); window.location.href='dashboard.php';</script>";
+  exit;
+}
 
-$sql = "UPDATE comanda SET status_pedidos = 'finalizado', status_pagamento = 'paga' WHERE id = ?";
+$comanda_id = intval($_GET['comanda_id']);
+
+// Atualiza o status da comanda
+$sql = "UPDATE comanda SET status_comanda = 'Fechada' WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $comanda_id);
+$stmt->execute();
 
-if ($stmt->execute()) {
-  echo json_encode(["sucesso" => true]);
-} else {
-  http_response_code(500);
-  echo json_encode(["erro" => "Erro ao fechar comanda"]);
-}
+echo "<script>alert('Comanda fechada com sucesso!'); window.location.href='dashboard.php';</script>";
 ?>

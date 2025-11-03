@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include('db/conexao.php');
 
 //comando necessário para usar $_SESSION
 session_start();
@@ -22,7 +22,7 @@ if ($result->num_rows === 1) {
         $_SESSION['usuario_id'] = $user['id'];
         $_SESSION['funcao'] = $user['funcao'];
         //redireciona para o dashboard (tela principal)
-        header("Location: ../frontend/dashboard.php");
+        header("Location: dashboard.php");
     } else {
         echo "Senha incorreta.";
     }
