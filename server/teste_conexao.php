@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost:3307';
 $user = 'root';
-$pass = 'naua123'; // ou sua senha, se tiver
+$pass = '';
 $dbname = 'trackorder';
 
 $conn = new mysqli($host, $user, $pass, $dbname);
