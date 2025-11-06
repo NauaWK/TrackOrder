@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       align-items: center;
       background-color: hsl(60, 31%, 94%);
       font-family: Verdana, Geneva, Tahoma, sans-serif;
+      overflow: hidden;
     }
     #formCard {
       width: 40%;
@@ -51,16 +52,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       width: 100%;
     }
     label {
-      margin-top: 10%;
+      margin-top: 2%;
     }
     input {
       font-size: 1em;
-      padding: 5%;
+      padding: 3%;
       margin-top: 2%;
       border: none;
     }
     button {
-      margin-top: 10%;
+      margin-top: 5%;
       color: #ffffff;
       background-color: hsla(240, 100%, 50%, 0.7);
       font-size: 1em;
@@ -77,6 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       margin-top: 5%;
       text-decoration: none;
       color: #000000;
+    }
+    a:hover{
+      text-decoration: underline;
     }
   </style>
 </head>

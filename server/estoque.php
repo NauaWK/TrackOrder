@@ -29,7 +29,6 @@ $produtos = $conn->query("SELECT * FROM produto");
     }
     .btn {
       margin: 1% 0.5%;
-      padding: 1% 2%;
       font-size: 1em;
       border: none;
       border-radius: 5px;

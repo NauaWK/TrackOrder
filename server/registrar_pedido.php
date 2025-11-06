@@ -28,11 +28,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
   }
 
-  // Buscar preço unitário
-  $res = $conn->prepare("SELECT preco_unitario FROM produto WHERE id = ?");
+  // Verifica estoque e busca preço
+  $res = $conn->prepare("SELECT quantidade, preco_unitario FROM produto WHERE id = ?");
   $res->bind_param("i", $produto_id);
   $res->execute();
-  $preco = $res->get_result()->fetch_assoc()['preco_unitario'];
+  $produto_info = $res->get_result()->fetch_assoc();
+
+  if ($produto_info['quantidade'] < $quantidade) {
+    echo "<script>alert('Estoque insuficiente para esse produto.'); window.location.href='registrar_pedido.php';</script>";
+    exit;
+  }
+
+  $preco = $produto_info['preco_unitario'];
   $total = $preco * $quantidade;
 
   // Criar pedido
@@ -44,6 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Vincular produto ao pedido
   $stmt = $conn->prepare("INSERT INTO produto_pedido (pedido_id, produto_id, produto_quantidade) VALUES (?, ?, ?)");
   $stmt->bind_param("iii", $pedido_id, $produto_id, $quantidade);
+  $stmt->execute();
+
+  // Atualizar estoque do produto
+  $stmt = $conn->prepare("UPDATE produto SET quantidade = quantidade - ? WHERE id = ?");
+  $stmt->bind_param("ii", $quantidade, $produto_id);
   $stmt->execute();
 
   // Vincular pedido à comanda
@@ -75,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       align-items: center;
       background-color: hsl(60, 31%, 94%);
       font-family: Verdana, Geneva, Tahoma, sans-serif;
+      overflow: hidden;
     }
     #formCard {
       width: 40%;
@@ -91,16 +104,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       width: 100%;
     }
     label {
-      margin-top: 10%;
+      margin-top: 2%;
     }
     select, input {
       font-size: 1em;
-      padding: 5%;
-      margin-top: 2%;
+      padding: 3%;
+      margin-top: 1%;
       border: none;
     }
     button {
-      margin-top: 10%;
+      margin-top: 5%;
       color: #ffffff;
       background-color: hsla(240, 100%, 50%, 0.7);
       font-size: 1em;
@@ -117,6 +130,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       margin-top: 5%;
       text-decoration: none;
       color: #000000;
+    }
+    a:hover{
+      text-decoration: underline;
     }
   </style>
 </head>
