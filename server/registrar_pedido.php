@@ -7,16 +7,20 @@ if (!isset($_SESSION['usuario_id'])) {
 
 include('db/conexao.php');
 
-// Buscar comandas abertas
-$comandas = $conn->query("SELECT id, cliente_nome FROM comanda WHERE status_comanda = 'Aberta'");
+// Verifica se o ID da comanda foi passado na URL
+$comanda_id = $_GET['comanda_id'] ?? 0;
+if ($comanda_id == 0) {
+  echo "<script>alert('Comanda não especificada.'); window.location.href='dashboard.php';</script>";
+  exit;
+}
 
 // Buscar produtos disponíveis
 $produtos = $conn->query("SELECT id, nome FROM produto");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $comanda_id = $_POST['comanda_id'] ?? 0;
   $produto_id = $_POST['produto_id'] ?? 0;
   $quantidade = $_POST['quantidade'] ?? 1;
+  $observacao = $_POST['observacao'] ?? null;
 
   // Verifica se a comanda está aberta
   $check = $conn->prepare("SELECT status_comanda FROM comanda WHERE id = ?");
@@ -35,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $produto_info = $res->get_result()->fetch_assoc();
 
   if ($produto_info['quantidade'] < $quantidade) {
-    echo "<script>alert('Estoque insuficiente para esse produto.'); window.location.href='registrar_pedido.php';</script>";
+    echo "<script>alert('Estoque insuficiente para esse produto.'); window.location.href='dashboard.php';</script>";
     exit;
   }
 
@@ -43,8 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $total = $preco * $quantidade;
 
   // Criar pedido
-  $stmt = $conn->prepare("INSERT INTO pedido (total_pedido) VALUES (?)");
-  $stmt->bind_param("d", $total);
+  $stmt = $conn->prepare("INSERT INTO pedido (total_pedido, observacao) VALUES (?, ?)");
+  $stmt->bind_param("ds", $total, $observacao);
   $stmt->execute();
   $pedido_id = $conn->insert_id;
 
@@ -138,15 +142,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
   <div id="formCard">
-    <h2>Novo Pedido</h2>
+    <h2>Novo Pedido - Comanda #<?= htmlspecialchars($comanda_id) ?></h2>
     <form method="POST">
-      <label for="comanda_id">Comanda:</label>
-      <select name="comanda_id" required>
-        <option value="" disabled selected>Selecione uma comanda</option>
-        <?php while($c = $comandas->fetch_assoc()): ?>
-          <option value="<?= $c['id'] ?>">#<?= $c['id'] ?> - <?= $c['cliente_nome'] ?></option>
-        <?php endwhile; ?>
-      </select>
+      <input type="hidden" name="comanda_id" value="<?= htmlspecialchars($comanda_id) ?>">
 
       <label for="produto_id">Produto:</label>
       <select name="produto_id" required>
@@ -158,6 +156,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <label for="quantidade">Quantidade:</label>
       <input type="number" name="quantidade" min="1" required>
+
+      <label for="observacao">Observação:</label>
+      <textarea name="observacao" rows="3" placeholder="Ex: sem cebola, ponto da carne..."></textarea>
 
       <button type="submit">Registrar Pedido</button>
     </form>

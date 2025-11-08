@@ -10,12 +10,11 @@ include('db/conexao.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $nome = $_POST['cliente_nome'] ?? '';
   $mesa = $_POST['numero_mesa'] ?? 0;
-  $obs = $_POST['observacao'] ?? '';
 
-  $sql = "INSERT INTO comanda (cliente_nome, numero_mesa, observacao, hora_inicio, valor_total, status_comanda)
-          VALUES (?, ?, ?, NOW(), 0, 'Aberta')";
+  $sql = "INSERT INTO comanda (cliente_nome, numero_mesa, hora_inicio, valor_total, status_comanda)
+          VALUES (?, ?, NOW(), 0, 'Aberta')";
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param("sis", $nome, $mesa, $obs);
+  $stmt->bind_param("si", $nome, $mesa);
   $stmt->execute();
 
   header("Location: dashboard.php");
@@ -95,9 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <label for="numero_mesa">Número da Mesa:</label>
       <input type="number" name="numero_mesa" required>
-
-      <label for="observacao">Observações:</label>
-      <textarea name="observacao" rows="3"></textarea>
 
       <button type="submit">Criar Comanda</button>
     </form>

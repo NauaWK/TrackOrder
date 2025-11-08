@@ -81,28 +81,30 @@
         #submitBtn:active{
             background-color: hsla(240, 100%, 50%, 0.3);
         }
-        #signUpBtn{
-            border: none;
+        #signUpBtn {
             display: block;
             margin: 0 auto;
             margin-top: 10%;
             padding: 5%;
+            width: 50%;
             cursor: pointer;
             font-size: 1em;
-            transition: 0.3s ease;
-            background-color: hsl(60, 30%, 96%);
-        }
-        #signUpBtn a{
             font-family: Verdana, Geneva, Tahoma, sans-serif;
+            text-align: center;
             text-decoration: none;
             color: #000000;
+            background-color: hsl(60, 30%, 96%);
+            border: none;
+            transition: 0.3s ease;
         }
-        #signUpBtn:hover{
+
+        #signUpBtn:hover {
             border-radius: 10px;
             background-color: #000000;
-            a{color: #ffffff;}
+            color: #ffffff;
         }
-        #signUpBtn:active{
+
+        #signUpBtn:active {
             background-color: hsla(0, 0%, 0%, 0.8);
         }
 
@@ -124,9 +126,7 @@
                 <input type="password" name="senha" placeholder="Senha" required>
                 <button type="submit" id="submitBtn">Entrar</button>
             </form>
-            <button id="signUpBtn">
-                <a href="cadastro.html" target="_blank">Cadastrar-se</a>
-            </button>
+            <a href="cadastro.html" id="signUpBtn">Cadastrar-se</a>
         </div>
     </div>
 </body>

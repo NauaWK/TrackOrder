@@ -23,7 +23,6 @@ CREATE TABLE comanda (
   id INT AUTO_INCREMENT PRIMARY KEY,
   cliente_nome VARCHAR(100),
   numero_mesa INT,
-  observacao TEXT,
   hora_inicio DATETIME,
   valor_total DECIMAL(10,2),
   status_comanda VARCHAR(20)
@@ -32,7 +31,8 @@ CREATE TABLE comanda (
 -- Tabela de pedidos
 CREATE TABLE pedido (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  total_pedido DECIMAL(10,2)
+  total_pedido DECIMAL(10,2),
+  observacao TEXT
 );
 
 -- Tabela de vínculo entre pedido e produto

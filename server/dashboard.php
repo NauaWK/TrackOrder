@@ -22,7 +22,7 @@ $result = $conn->query("SELECT * FROM comanda WHERE status_comanda = 'Aberta'");
         background-color: #F7F7F9;
         display: flex;
         flex-direction: row;
-
+        overflow: hidden;
     }
 
     main {
@@ -34,9 +34,7 @@ $result = $conn->query("SELECT * FROM comanda WHERE status_comanda = 'Aberta'");
         padding-top: 3%;
         box-sizing: border-box;
         overflow: auto;
-
     }
-
 
     header {
         width: 20%;
@@ -66,10 +64,7 @@ $result = $conn->query("SELECT * FROM comanda WHERE status_comanda = 'Aberta'");
         text-decoration: none;
     }
 
-    h1 {
-        color: hsla(240, 100%, 50%, 0.7);
-    }
-
+    
     .btn {
         display: block;
         font-size: 1em;
@@ -83,7 +78,10 @@ $result = $conn->query("SELECT * FROM comanda WHERE status_comanda = 'Aberta'");
         cursor: pointer;
         transition: background-color 0.3s ease;
     }
-
+    
+    h1 {
+        color: hsla(240, 100%, 50%, 0.7);
+    }
     .Nbtn {
         display: block;
         font-size: 1em;
@@ -102,6 +100,10 @@ $result = $conn->query("SELECT * FROM comanda WHERE status_comanda = 'Aberta'");
     .Nbtn:hover {
         background-color: hsla(240, 100%, 50%, 0.5);
     }
+    
+    .Nbtn:active {
+        background-color: hsla(240, 100%, 50%, 0.3);
+    }
 
     .btn:hover {
         background-color: #404650ff;
@@ -111,7 +113,10 @@ $result = $conn->query("SELECT * FROM comanda WHERE status_comanda = 'Aberta'");
         background-color: hsla(0, 100%, 50%, 0.7);
     }
     #closeBtn:hover{
-        background-color: hsla(0, 100%, 50%, 0.9);
+        background-color: hsla(0, 100%, 50%, 0.5);
+    }
+    #closeBtn:active{
+        background-color: hsla(0, 100%, 50%, 0.3);
     }
 
     div.sair {
@@ -197,7 +202,8 @@ $result = $conn->query("SELECT * FROM comanda WHERE status_comanda = 'Aberta'");
             <div class="barra">
                 <a href="dashboard.php"><button class="btn">Dashboard</button></a>
                 <a href="estoque.php"><button class="btn">Estoque</button></a>
-                <a href=""><button class="btn">Historico</button></a>
+                <a href="historico.php"><button class="btn">Historico</button></a>
+                <a href="info.php"><button class="btn">Estatística </button></a>
             </div>
             <div class="sair">
                 <a href="logout.php"><button class="btn">Sair</button></a>
@@ -223,13 +229,58 @@ $result = $conn->query("SELECT * FROM comanda WHERE status_comanda = 'Aberta'");
                     <a href="pedidos.php?comanda_id=<?= $row['id'] ?>"><button class="Nbtn">Ver Pedidos</button></a>
                     <a href="registrar_pedido.php?comanda_id=<?= $row['id'] ?>"><button class="Nbtn">Novo
                             Pedido</button></a>
-                    <a href="fechar_comanda.php?comanda_id=<?= $row['id'] ?>"><button class="Nbtn" id="closeBtn">Fechar</button></a>
+                    <button class="Nbtn" id="closeBtn" onclick="fecharComanda(<?= $row['id'] ?>, this)">Fechar</button>
+
                 </div>
             </div>
 
             <?php endwhile; ?>
         </div>
     </main>
+    <script>
+function fecharComanda(id, botao) {
+  
+
+  fetch('fechar_comanda.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'comanda_id=' + encodeURIComponent(id)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.sucesso) {
+      // Mostra mensagem de sucesso
+      mostrarAviso('✅ Comanda fechada com sucesso!', 'sucesso');
+      // Remove o card da comanda fechada
+      botao.closest('.card').remove();
+    } else {
+      mostrarAviso('❌ Erro: ' + data.erro, 'erro');
+    }
+  })
+  .catch(() => {
+    mostrarAviso('❌ Erro na comunicação com o servidor.', 'erro');
+  });
+}
+
+function mostrarAviso(texto, tipo) {
+  let aviso = document.createElement('div');
+  aviso.textContent = texto;
+  aviso.style.position = 'fixed';
+  aviso.style.top = '20px';
+  aviso.style.right = '20px';
+  aviso.style.padding = '15px 25px';
+  aviso.style.borderRadius = '8px';
+  aviso.style.color = 'white';
+  aviso.style.fontWeight = 'bold';
+  aviso.style.zIndex = '1000';
+  aviso.style.backgroundColor = tipo === 'sucesso' ? 'green' : 'red';
+  aviso.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+  document.body.appendChild(aviso);
+
+  setTimeout(() => aviso.remove(), 3000);
+}
+</script>
+
 </body>
 
 </html>

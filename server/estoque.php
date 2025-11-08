@@ -1,7 +1,7 @@
 <?php
 session_start();
-if (!isset($_SESSION['funcao']) || $_SESSION['funcao'] !== 'gerente') {
-  echo "<script>alert('Acesso restrito aos gerentes.'); window.location.href='dashboard.php';</script>";
+if (!isset($_SESSION['usuario_id'])) {
+  echo "<script>alert('Você precisa estar logado.'); window.location.href='../templates/index.html';</script>";
   exit;
 }
 
@@ -45,17 +45,36 @@ $produtos = $conn->query("SELECT * FROM produto");
       gap: 10px;
       margin-bottom: 1%;
     }
-    table {
-      width: 80%;
-      margin-top: 2%;
-      border-collapse: collapse;
-      background-color: white;
-    }
-    th, td {
-      padding: 1%;
-      border: 1px solid #ccc;
-      text-align: center;
-    }
+
+      .estoque {
+  width: 90%;
+  margin-top: 30px;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.estoque thead {
+  background-color: #2B2F36;
+  color: white;
+}
+
+.estoque th, .estoque td {
+  padding: 15px;
+  text-align: left;
+}
+
+.estoque tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.estoque tbody tr:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+    
   </style>
 </head>
 <body>
@@ -66,20 +85,24 @@ $produtos = $conn->query("SELECT * FROM produto");
     <a href="dashboard.php"><button class="btn">Voltar ao Dashboard</button></a>
   </div>
 
-  <table>
+  <table class="estoque">
+    <thead>
     <tr>
       <th>ID</th>
       <th>Nome</th>
       <th>Quantidade</th>
       <th>Preço Unitário (R$)</th>
     </tr>
+    </thead>
     <?php while($p = $produtos->fetch_assoc()): ?>
+      <tbody>
     <tr>
       <td><?= $p['id'] ?></td>
       <td><?= $p['nome'] ?></td>
       <td><?= $p['quantidade'] ?></td>
       <td><?= number_format($p['preco_unitario'], 2, ',', '.') ?></td>
     </tr>
+    </tbody>
     <?php endwhile; ?>
   </table>
 </body>

@@ -1,8 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
-  echo "<script>alert('Você precisa estar logado.'); window.location.href='../templates/index.html';</script>";
-  exit;
+    echo "<script>alert('Você precisa estar logado.'); window.location.href='../templates/index.html';</script>";
+    exit;
 }
 
 include('db/conexao.php');
@@ -10,10 +10,11 @@ include('db/conexao.php');
 $comanda_id = isset($_GET['comanda_id']) ? intval($_GET['comanda_id']) : 0;
 
 // Buscar pedidos
-$stmt = $conn->prepare("SELECT pedido.id, pedido.total_pedido 
+$stmt = $conn->prepare("SELECT pedido.id, pedido.total_pedido, pedido.observacao 
                         FROM pedido 
                         JOIN pedido_comanda ON pedido.id = pedido_comanda.pedido_id 
                         WHERE pedido_comanda.comanda_id = ?");
+
 $stmt->bind_param("i", $comanda_id);
 $stmt->execute();
 $pedidos = $stmt->get_result();
@@ -27,6 +28,7 @@ $info = $stmt->get_result()->fetch_assoc();
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Pedidos da Comanda</title>
@@ -51,11 +53,11 @@ $info = $stmt->get_result()->fetch_assoc();
             z-index: 10;
         }
 
-        #menuToggle:checked ~ header {
+        #menuToggle:checked~header {
             left: 0;
         }
 
-        #menuToggle:checked ~ main {
+        #menuToggle:checked~main {
             transform: translateX(20%);
         }
 
@@ -149,6 +151,35 @@ $info = $stmt->get_result()->fetch_assoc();
             transition: transform 0.3s ease;
         }
 
+        .pedidos {
+          width: 90%;
+          margin-top: 30px;
+          border-collapse: collapse;
+          background-color: white;
+          border-radius: 10px;
+          overflow: hidden;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .pedidos thead {
+          background-color: #2B2F36;
+          color: white;
+        }
+
+        .pedidos th, .pedidos    td {
+          padding: 15px;
+          text-align: left;
+        }
+
+        .pedidos tr:nth-child(even) {
+          background-color: #f2f2f2;
+        }
+
+        .pedidos tbody tr:hover {
+          background-color: #e0e0e0;
+          
+        }
+
         h1 {
             color: hsla(240, 100%, 50%, 0.7);
         }
@@ -158,12 +189,6 @@ $info = $stmt->get_result()->fetch_assoc();
             margin-top: 2%;
             border-collapse: collapse;
             background-color: white;
-        }
-
-        th, td {
-            padding: 1%;
-            border: 1px solid #ccc;
-            text-align: left;
         }
 
         ul {
@@ -193,6 +218,7 @@ $info = $stmt->get_result()->fetch_assoc();
         }
     </style>
 </head>
+
 <body>
     <input type="checkbox" id="menuToggle" hidden>
     <label for="menuToggle" class="menu-btn">☰</label>
@@ -200,13 +226,15 @@ $info = $stmt->get_result()->fetch_assoc();
     <header>
         <label for="menuToggle" class="close-btn">×</label>
         <div class="logo">
-            <span id="trackText" class="spanTextTitle">Track</span><span id="orderText" class="spanTextTitle">Order</span>
+            <span id="trackText" class="spanTextTitle">Track</span><span id="orderText"
+                class="spanTextTitle">Order</span>
         </div>
         <nav class="links">
             <div class="barra">
                 <a href="dashboard.php"><button class="btn">Dashboard</button></a>
                 <a href="estoque.php"><button class="btn">Estoque</button></a>
-                <a href=""><button class="btn">Historico</button></a>
+                <a href="historico.php"><button class="btn">Historico</button></a>
+                <a href="info.php"><button class="btn">Estatística </button></a>
             </div>
             <div class="sair">
                 <a href="logout.php"><button class="btn">Sair</button></a>
@@ -216,38 +244,46 @@ $info = $stmt->get_result()->fetch_assoc();
 
     <main>
         <h1>Pedidos da Comanda #<?= $comanda_id ?></h1>
-        <p>Cliente: <strong><?= $info['cliente_nome'] ?></strong> | Mesa: <strong><?= $info['numero_mesa'] ?></strong></p>
+        <p>Cliente: <strong><?= $info['cliente_nome'] ?></strong> | Mesa: <strong><?= $info['numero_mesa'] ?></strong>
+        </p>
 
-        <table>
+        <table class="pedidos">
+            <thead>
             <tr>
                 <th>ID do Pedido</th>
                 <th>Total (R$)</th>
                 <th>Produtos</th>
+                <th>Observação</th>
             </tr>
+            </thead>
+            <tbody>
             <?php while ($row = $pedidos->fetch_assoc()): ?>
-                <?php
-                $pedido_id = $row['id'];
-                $stmt_produtos = $conn->prepare("SELECT produto.nome, produto_pedido.produto_quantidade 
-                                                 FROM produto_pedido 
-                                                 JOIN produto ON produto.id = produto_pedido.produto_id 
-                                                 WHERE produto_pedido.pedido_id = ?");
-                $stmt_produtos->bind_param("i", $pedido_id);
-                $stmt_produtos->execute();
-                $produtos = $stmt_produtos->get_result();
-                ?>
-                <tr>
-                    <td><?= $row['id'] ?></td>
-                    <td><?= number_format($row['total_pedido'], 2, ',', '.') ?></td>
-                    <td>
-                            <?php while ($prod = $produtos->fetch_assoc()): ?>
-                                <?= $prod['produto_quantidade'] ?>x <?= $prod['nome'] ?>
-                            <?php endwhile; ?>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
+            <?php
+            $pedido_id = $row['id'];
+            $stmt_produtos = $conn->prepare("SELECT produto.nome, produto_pedido.produto_quantidade 
+                                            FROM produto_pedido 
+                                            JOIN produto ON produto.id = produto_pedido.produto_id 
+                                            WHERE produto_pedido.pedido_id = ?");
+            $stmt_produtos->bind_param("i", $pedido_id);
+            $stmt_produtos->execute();
+            $produtos = $stmt_produtos->get_result();
+            ?>
+            <tr>
+                <td><?= $row['id'] ?></td>
+                <td><?= number_format($row['total_pedido'], 2, ',', '.') ?></td>
+                <td>
+                    <?php while ($prod = $produtos->fetch_assoc()): ?>
+                        <?= $prod['produto_quantidade'] ?>x <?= $prod['nome'] ?><br>
+                    <?php endwhile; ?>
+                </td>
+                <td><?= htmlspecialchars($row['observacao']) ?></td>
+            </tr>
+            <?php endwhile; ?> 
+            </tbody>
         </table>
 
         <a href="dashboard.php"><button class="Nbtn">Voltar ao Dashboard</button></a>
     </main>
 </body>
+
 </html>

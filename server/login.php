@@ -24,9 +24,9 @@ if ($result->num_rows === 1) {
         //redireciona para o dashboard (tela principal)
         header("Location: dashboard.php");
     } else {
-        echo "Senha incorreta.";
+        echo "<script>alert('Credenciais inválidas.'); window.location.href='../templates/index.html';</script>";
     }
 } else {
-    echo "Usuário não encontrado.";
+    echo "<script>alert('Credenciais inválidas.'); window.location.href='../templates/index.html';</script>";
 }
 ?>
