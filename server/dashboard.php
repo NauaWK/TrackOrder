@@ -156,7 +156,7 @@ $result = $conn->query("SELECT * FROM comanda WHERE status_comanda = 'Aberta'");
 
     .card:hover {
         transform: scale(1.03);
-        background-color: hsla(60, 8%, 83%, 1.00);
+        background-color: hsla(60, 9%, 89%, 1.00);
     }
 
     .card div {

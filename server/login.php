@@ -24,9 +24,9 @@ if ($result->num_rows === 1) {
         //redireciona para o dashboard (tela principal)
         header("Location: dashboard.php");
     } else {
-        echo "<script>alert('Credenciais inválidas.'); window.location.href='../templates/index.html';</script>";
+        echo "<script>alert('Credenciais inválidas.'); window.location.href='../index.html';</script>";
     }
 } else {
-    echo "<script>alert('Credenciais inválidas.'); window.location.href='../templates/index.html';</script>";
+    echo "<script>alert('Credenciais inválidas.'); window.location.href='../index.html';</script>";
 }
 ?>

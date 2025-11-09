@@ -20,7 +20,7 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("sss", $nome, $senha, $cargo);
 
 if ($stmt->execute()) {
-    header("Location: ../templates/index.html");
+    header("Location: ../index.html");
     exit;
 } else {
     echo "Erro ao cadastrar: " . $conn->error;

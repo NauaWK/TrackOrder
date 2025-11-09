@@ -4,8 +4,9 @@ if (!isset($_SESSION['usuario_id'])) {
   echo "<script>alert('Você precisa estar logado.'); window.location.href='../templates/index.html';</script>";
   exit;
 }
+
 if (!isset($_SESSION['funcao']) || $_SESSION['funcao'] !== 'gerente') {
-  echo "<script>alert('Acesso restrito aos gerentes.'); window.location.href='estoque.php';</script>";
+  echo "<script>alert('Ação restrita aos gerentes.'); window.location.href='estoque.php';</script>";
   exit;
 }
 

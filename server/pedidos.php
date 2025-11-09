@@ -250,7 +250,6 @@ $info = $stmt->get_result()->fetch_assoc();
         <table class="pedidos">
             <thead>
             <tr>
-                <th>ID do Pedido</th>
                 <th>Total (R$)</th>
                 <th>Produtos</th>
                 <th>Observação</th>
@@ -269,7 +268,6 @@ $info = $stmt->get_result()->fetch_assoc();
             $produtos = $stmt_produtos->get_result();
             ?>
             <tr>
-                <td><?= $row['id'] ?></td>
                 <td><?= number_format($row['total_pedido'], 2, ',', '.') ?></td>
                 <td>
                     <?php while ($prod = $produtos->fetch_assoc()): ?>
@@ -281,6 +279,7 @@ $info = $stmt->get_result()->fetch_assoc();
             <?php endwhile; ?> 
             </tbody>
         </table>
+
 
         <a href="dashboard.php"><button class="Nbtn">Voltar ao Dashboard</button></a>
     </main>
